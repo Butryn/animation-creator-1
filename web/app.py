@@ -10,6 +10,8 @@ app = Flask(__name__)
 s3 = boto3.resource('s3')
 media_storage = S3MediaStorage(s3, os.getenv('APP_BUCKET_NAME'))
 
+photos_list=[]
+
 @app.route("/")
 def hello():
     return render_template(
@@ -22,12 +24,26 @@ def handle_upload():
     return redirect(request.url)
   
   uploaded_file = request.files['uploaded_file']
+  destination_name = generate_name(uploaded_file.filename)
   media_storage.store(
      dest="/uploaded/%s" % uploaded_file.filename,
      source=uploaded_file
   )
 
-  return "OK" 
+  photos_list.append(destination_name)
+
+  return "OK"
+ 
+@app.route("/proceed")
+def proceed_animation():
+  ani_request = {
+    "email": request.request.email,
+    "photos": photos_list
+  }
+
+  requestsQueue.send_message(
+    MessageBody=json.dumps(ani_request)
+  )
 
 
 @app.route("/prepare")
