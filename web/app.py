@@ -38,7 +38,7 @@ def handle_upload():
 
   photos_list.append(destination_name)
 
-  return "OK"
+  return prepare()
  
 @app.route("/proceed", methods=["POST"])
 def proceed_animation():
