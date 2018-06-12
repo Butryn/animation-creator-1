@@ -11,6 +11,7 @@ s3 = boto3.resource('s3')
 media_storage = S3MediaStorage(s3, os.getenv('APP_BUCKET_NAME'))
 
 photos_list=[]
+
 sqs = boto3.resource('sqs', region_name="eu-central-1")
 requestQueue = sqs.get_queue_by_name(
   QueueName=os.getenv("APP_QUEUE_NAME")
@@ -39,23 +40,25 @@ def handle_upload():
 
   return "OK"
  
-@app.route("/proceed")
+@app.route("/proceed", methods=["POST"])
 def proceed_animation():
   ani_request = {
-    "email": request.request.email,
+    "email": request.form['email'],
     "photos": photos_list
   }
 
-  requestsQueue.send_message(
+  requestQueue.send_message(
     MessageBody=json.dumps(ani_request)
   )
 
+  return "OK"
 
 @app.route("/prepare")
 def prepare():
   return render_template(
     'prepare.html',
-    invitation="the only limit is yourself" 
+    invitation="Lista zdjęć",
+    photos=photos_list 
   )
 
 if __name__ == '__main__':
