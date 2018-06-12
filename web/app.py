@@ -1,16 +1,21 @@
 import boto3
 import os
-
+import json
 from flask import Flask
 from flask import render_template, request, flash
 from media.s3_storage import S3MediaStorage
- 
+from media.name_generator import generate_name
 app = Flask(__name__)
 
 s3 = boto3.resource('s3')
 media_storage = S3MediaStorage(s3, os.getenv('APP_BUCKET_NAME'))
 
 photos_list=[]
+sqs = boto3.resource('sqs', region_name="eu-central-1")
+requestQueue = sqs.get_queue_by_name(
+  QueueName=os.getenv("APP_QUEUE_NAME")
+)
+
 
 @app.route("/")
 def hello():
@@ -26,7 +31,7 @@ def handle_upload():
   uploaded_file = request.files['uploaded_file']
   destination_name = generate_name(uploaded_file.filename)
   media_storage.store(
-     dest="/uploaded/%s" % uploaded_file.filename,
+     dest=destination_name,
      source=uploaded_file
   )
 
