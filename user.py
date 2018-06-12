@@ -2,7 +2,7 @@ import boto3, time
 
 sqs = boto3.resource('sqs', region_name="eu-central-1")
 
-tweets = sqs.get_queue_by_name(QueueName='s179849')
+tweets = sqs.get_queue_by_name(QueueName='Butryn')
 
 while True:
   for message in tweets.receive_messages():
