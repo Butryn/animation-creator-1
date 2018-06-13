@@ -53,7 +53,9 @@ def proceed_animation():
     MessageBody=json.dumps(ani_request)
   )
 
-  return "OK"
+  return render_template(
+      'proceed.html'
+    )
 
 @app.route("/prepare")
 def prepare():
