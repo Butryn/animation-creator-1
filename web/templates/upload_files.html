@@ -1,8 +1,25 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<div class="alert alert-success" role="alert">
+  <h4 class="alert-heading">Witam!</h4>
+  <p>Projekt realizowany w ramach zajęć z przedmiotu wirtualizacja i przedstwarzanie w chmurze .</p>
+  <hr>
+  <p class="mb-0">Proszę wybrać zdjęcie za pomocą przycisku 'Wybierz'. Następnie za pomocą przycisku 'Dodaj zdjęcie' załaduj obraz.</p>
+</div>
+
+<div class="container">
+		
 <form method="POST" action="{{ url_for('handle_upload') }}" enctype="multipart/form-data">
+<div class="row">
+  <div class="col-md-3">  
   <input name="uploaded_file" type="file"/>
-  <button type="submit">Add Photo</button>
+</div>   
+  <div class="col-md-9">
+  <button type="submit" class="btn btn-success">Dodaj zdjęcie</button>
+</div>
+</div>
 </form>
+
+</div>
 {% endblock %}
