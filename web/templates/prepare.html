@@ -19,8 +19,13 @@
      {% endfor%}
    </ul>
    <form method="POST" action="/proceed">
-     <input name="email" type="email"/>
+     <div class="row">
+     <div class="col-md-3">  
+     <input name="email" class="form-control" type="email"/>
+     </div>
+     <div class="col-md-9">
      <button type="submit" class="btn btn-success">let's do this</button>
+     </div>   
    </form>
 </div>
 {% endblock %}
